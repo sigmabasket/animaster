@@ -74,38 +74,25 @@ function animaster() {
             element.classList.add('hide');
         },
         moveAndHide(element, duration) {
-            
             const moveDuration = duration * 2/5; 
             const fadeDuration = duration * 3/5;  
-            
             this.move(element, moveDuration, {x: 100, y: 20});
-            
             setTimeout(() => {
                 this.fadeOut(element, fadeDuration);
             }, moveDuration);
         },
-
         showAndHide(element, duration) {
-
-            
             const stepDuration = duration / 3; 
-            
             this.fadeIn(element, stepDuration);
-            
             setTimeout(() => {
                 this.fadeOut(element, stepDuration);
             }, stepDuration * 2); 
         },
-
         heartBeating(element) {
-
-            
             const beatDuration = 500; 
-            
             function beat() {
                 element.style.transitionDuration = `${beatDuration}ms`;
                 element.style.transform = getTransform(null, 1.4);
-                
                 setTimeout(() => {
                     element.style.transitionDuration = `${beatDuration}ms`;
                     element.style.transform = getTransform(null, 1);
