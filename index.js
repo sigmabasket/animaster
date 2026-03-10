@@ -23,6 +23,23 @@ function addListeners() {
             const block = document.getElementById('fadeOutBlock');
             animaster().fadeOut(block, 5000);
         });
+    document.getElementById('moveAndHidePlay')
+        .addEventListener('click', function () {
+            const block = document.getElementById('moveAndHideBlock');
+            animaster().moveAndHide(block, 5000);
+        });
+
+    document.getElementById('showAndHidePlay')
+        .addEventListener('click', function () {
+            const block = document.getElementById('showAndHideBlock');
+            animaster().showAndHide(block, 6000);
+        });
+
+    document.getElementById('heartBeatingPlay')
+        .addEventListener('click', function () {
+            const block = document.getElementById('heartBeatingBlock');
+            animaster().heartBeating(block);
+        });
 }
 
 function getTransform(translation, ratio) {
@@ -55,6 +72,48 @@ function animaster() {
             element.style.transitionDuration =  `${duration}ms`;
             element.classList.remove('show');
             element.classList.add('hide');
+        },
+        moveAndHide(element, duration) {
+            
+            const moveDuration = duration * 2/5; 
+            const fadeDuration = duration * 3/5;  
+            
+            this.move(element, moveDuration, {x: 100, y: 20});
+            
+            setTimeout(() => {
+                this.fadeOut(element, fadeDuration);
+            }, moveDuration);
+        },
+
+        showAndHide(element, duration) {
+
+            
+            const stepDuration = duration / 3; 
+            
+            this.fadeIn(element, stepDuration);
+            
+            setTimeout(() => {
+                this.fadeOut(element, stepDuration);
+            }, stepDuration * 2); 
+        },
+
+        heartBeating(element) {
+
+            
+            const beatDuration = 500; 
+            
+            function beat() {
+                element.style.transitionDuration = `${beatDuration}ms`;
+                element.style.transform = getTransform(null, 1.4);
+                
+                setTimeout(() => {
+                    element.style.transitionDuration = `${beatDuration}ms`;
+                    element.style.transform = getTransform(null, 1);
+                }, beatDuration);
+            }
+            
+            beat();
+            setInterval(beat, beatDuration * 2); 
         }
     }
 }
