@@ -200,7 +200,7 @@ function animaster() {
             let moveTimeoutId;
             let fadeTimeoutId;
             let isReset = false;
-            
+                
             this.move(element, moveDuration, {x: 100, y: 20});
 
             moveTimeoutId = setTimeout(() => {
