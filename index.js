@@ -140,17 +140,31 @@
             this.play(element);
             },
             fadeIn(element, duration){
+                _steps = [];
+
+                _steps.push({
+                    type: 'fadeIn',
+                    duration: duration,
+                    params: null
+                });
+
                 resetFadeIn(element);
-                element.style.transitionDuration =  `${duration}ms`;
-                element.classList.remove('hide');
-                element.classList.add('show');
+                this.play(element);
             },
+
             fadeOut(element, duration){
+                _steps = [];
+
+                _steps.push({
+                    type: 'fadeOut',
+                    duration: duration,
+                    params: null
+                });
+
                 resetFadeOut(element);
-                element.style.transitionDuration =  `${duration}ms`;
-                element.classList.remove('show');
-                element.classList.add('hide');
+                this.play(element);
             },
+
             moveAndHide(element, duration) {
                 resetMoveAndScale(element);
                 resetFadeOut(element);
