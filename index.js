@@ -93,6 +93,31 @@
             element.style.transform = null;
         }
 
+        let _steps = [];
+
+        function executeStep(element, step) {
+            switch(step.type) {
+                case 'move':
+                    element.style.transitionDuration = `${step.duration}ms`;
+                    element.style.transform = getTransform(step.params, null);
+                    break;
+                case 'scale':
+                    element.style.transitionDuration = `${step.duration}ms`;
+                    element.style.transform = getTransform(null, step.params);
+                    break;
+                case 'fadeIn':
+                    element.style.transitionDuration = `${step.duration}ms`;
+                    element.classList.remove('hide');
+                    element.classList.add('show');
+                    break;
+                case 'fadeOut':
+                    element.style.transitionDuration = `${step.duration}ms`;
+                    element.classList.remove('show');
+                    element.classList.add('hide');
+                    break;
+            }
+        }
+
         return {
             move(element, duration, translation){
                 resetMoveAndScale(element);
@@ -192,6 +217,65 @@
                         resetMoveAndScale(element);
                     }
                 };
+            },
+            addMove(duration, translation) {
+                _steps.push({
+                    type: 'move',
+                    duration: duration,
+                    params: translation
+                });
+                return this; 
+            },
+
+            addScale(duration, ratio) {
+                _steps.push({
+                    type: 'scale',
+                    duration: duration,
+                    params: ratio
+                });
+                return this;
+            },
+
+            addFadeIn(duration) {
+                _steps.push({
+                    type: 'fadeIn',
+                    duration: duration,
+                    params: null
+                });
+                return this;
+            },
+
+            addFadeOut(duration) {
+                _steps.push({
+                    type: 'fadeOut',
+                    duration: duration,
+                    params: null
+                });
+                return this;
+            },
+
+            play(element) {
+                resetMoveAndScale(element);
+                resetFadeIn(element);
+                resetFadeOut(element);
+                
+                let currentTime = 0;
+                
+                _steps.forEach((step, index) => {
+                    setTimeout(() => {
+                        executeStep(element, step);
+                    }, currentTime);
+                    
+                    currentTime += step.duration;
+                });
+                
+                return this;
+            },
+
+            resetSteps() {
+                _steps = [];
+                return this;
             }
+            
         }
     }
