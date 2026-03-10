@@ -98,22 +98,37 @@ function animaster() {
         },
 
         heartBeating(element) {
+            const beatDuration = 500;
+            let intervalId;        // для хранения ID интервала
+            let timeoutId;         // для хранения ID таймаута
+            let isStopped = false; // флаг, чтобы не запускать новые эффекты после остановки
 
-            
-            const beatDuration = 500; 
-            
             function beat() {
+                if (isStopped) return; // если уже остановлено, ничего не делаем
+
                 element.style.transitionDuration = `${beatDuration}ms`;
                 element.style.transform = getTransform(null, 1.4);
-                
-                setTimeout(() => {
+
+                // очищаем предыдущий таймаут, если он был
+                if (timeoutId) clearTimeout(timeoutId);
+
+                timeoutId = setTimeout(() => {
+                    if (isStopped) return;
                     element.style.transitionDuration = `${beatDuration}ms`;
                     element.style.transform = getTransform(null, 1);
                 }, beatDuration);
             }
-            
-            beat();
-            setInterval(beat, beatDuration * 2); 
+
+            beat(); // запускаем первый удар
+            intervalId = setInterval(beat, beatDuration * 2);
+
+            return {
+                stop() {
+                    isStopped = true;          // устанавливаем флаг остановки
+                    clearInterval(intervalId);  // очищаем интервал
+                    clearTimeout(timeoutId);    // очищаем текущий таймаут (если он ещё не выполнился)
+                }
+            };
         }
     }
 }
