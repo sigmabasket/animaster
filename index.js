@@ -120,14 +120,24 @@
 
         return {
             move(element, duration, translation){
-                resetMoveAndScale(element);
-                element.style.transitionDuration = `${duration}ms`;
-                element.style.transform = getTransform(translation, null);
+            _steps = [];
+            _steps.push({
+                type: 'move',
+                duration: duration,
+                params: translation
+            });
+            resetMoveAndScale(element);
+            this.play(element);
             },
             scale(element, duration, ratio){
-                resetMoveAndScale(element);
-                element.style.transitionDuration =  `${duration}ms`;
-                element.style.transform = getTransform(null, ratio);
+            _steps = [];
+            _steps.push({
+                type: 'scale',
+                duration: duration,
+                params: ratio
+            });
+            resetMoveAndScale(element);
+            this.play(element);
             },
             fadeIn(element, duration){
                 resetFadeIn(element);
