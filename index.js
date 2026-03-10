@@ -35,10 +35,22 @@ function addListeners() {
             animaster().showAndHide(block, 6000);
         });
 
+    let heartBeatingAnimation = null;
     document.getElementById('heartBeatingPlay')
         .addEventListener('click', function () {
             const block = document.getElementById('heartBeatingBlock');
-            animaster().heartBeating(block);
+            if (heartBeatingAnimation) {
+                heartBeatingAnimation.stop();
+            }
+            heartBeatingAnimation = animaster().heartBeating(block);
+        });
+
+    document.getElementById('heartBeatingStop')
+        .addEventListener('click', function () {
+            if (heartBeatingAnimation) {
+                heartBeatingAnimation.stop();
+                heartBeatingAnimation = null;
+            }
         });
 }
 
@@ -89,18 +101,35 @@ function animaster() {
             }, stepDuration * 2); 
         },
         heartBeating(element) {
-            const beatDuration = 500; 
+            const beatDuration = 500;
+            let intervalId;
+            let timeoutId;
+            let isStopped = false; 
+
             function beat() {
+                if (isStopped) return; 
+
                 element.style.transitionDuration = `${beatDuration}ms`;
                 element.style.transform = getTransform(null, 1.4);
-                setTimeout(() => {
+                if (timeoutId) clearTimeout(timeoutId);
+
+                timeoutId = setTimeout(() => {
+                    if (isStopped) return;
                     element.style.transitionDuration = `${beatDuration}ms`;
                     element.style.transform = getTransform(null, 1);
                 }, beatDuration);
             }
-            
+
             beat();
-            setInterval(beat, beatDuration * 2); 
+            intervalId = setInterval(beat, beatDuration * 2);
+
+            return {
+                stop() {
+                    isStopped = true;
+                    clearInterval(intervalId);
+                    clearTimeout(timeoutId);
+                }
+            };
         }
     }
 }
